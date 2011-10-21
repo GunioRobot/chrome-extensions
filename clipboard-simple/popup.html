@@ -16,15 +16,15 @@
     <script>
       /**
        * See http://crbug.com/32363 for context.
-       * Run with 
-       *   --enable-experimental-extension-apis    
+       * Run with
+       *   --enable-experimental-extension-apis
        */
       function copy() {
         chrome.tabs.getSelected(null, function(tab) {
           chrome.experimental.clipboard.executeCopy(tab.id, function () {});
         });
       };
-      
+
       function paste() {
         chrome.tabs.getSelected(null, function(tab) {
           chrome.experimental.clipboard.executePaste(tab.id, function () {});

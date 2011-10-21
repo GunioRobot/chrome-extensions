@@ -3,14 +3,14 @@
  *
  * Part of the Python Cryptography Toolkit
  *
- * Distribute and use freely; there are no restrictions on further 
- * dissemination and usage except those imposed by the laws of your 
+ * Distribute and use freely; there are no restrictions on further
+ * dissemination and usage except those imposed by the laws of your
  * country of residence.
  *
  */
 
 #include "Python.h"
-  
+
 /* des.c */
 /* Copyright (C) 1993 Eric Young */
 /* Integrated into the PCT by A.M. Kuchling, November 1994 */
@@ -531,23 +531,23 @@ static int des_ecb_encrypt(des_cblock *input, des_cblock *output,
 }
 
 
-     
-static void block_decrypt(block_state *state, 
-			  unsigned char *in, 
+
+static void block_decrypt(block_state *state,
+			  unsigned char *in,
 			  unsigned char *out)
 {
 	des_ecb_encrypt((des_cblock *)in, (des_cblock *)out, *state, 0);
 }
 
-static void block_encrypt(block_state *state, 
-			  unsigned char *in, 
+static void block_encrypt(block_state *state,
+			  unsigned char *in,
 			  unsigned char *out)
 {
 	des_ecb_encrypt((des_cblock *)in, (des_cblock *)out, *state, 1);
 }
 
 /* NOW DEFINED IN des_local.h
- * See ecb_encrypt.c for a pseudo description of these macros. 
+ * See ecb_encrypt.c for a pseudo description of these macros.
  * #define PERM_OP(a,b,t,n,m) ((t)=((((a)>>(n))^(b))&(m)),\
  * 	(b)^=(t),\
  * 	(a)=((a)^((t)<<(n))))
@@ -575,7 +575,7 @@ static int des_set_key(des_cblock *key, block_state schedule)
 	c2l(in,c);
 	c2l(in,d);
 
-	/* do PC1 in 60 simple operations */ 
+	/* do PC1 in 60 simple operations */
 /*	PERM_OP(d,c,t,4,0x0f0f0f0f);
 	HPERM_OP(c,t,-2, 0xcccc0000);
 	HPERM_OP(c,t,-1, 0xaaaa0000);
@@ -624,7 +624,7 @@ static int des_set_key(des_cblock *key, block_state schedule)
 		/* table contained 0213 4657 */
 		*(k++)=((t<<16)|(s&0x0000ffff))&0xffffffff;
 		s=     ((s>>16)|(t&0xffff0000));
-		
+
 		s=(s<<4)|(s>>28);
 		*(k++)=s&0xffffffff;
 	}
@@ -654,7 +654,7 @@ static void block_init(block_state *state, unsigned char *key,
 {
 	char oddkey[8];
 	int i;
-  
+
 	for (i=0; i<8; i++)
 	{
 		oddkey[i]=odd_parity[ key[i] ];

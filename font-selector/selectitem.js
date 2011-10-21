@@ -15,8 +15,8 @@ function getStyleList(elem, names) {
 };
 
 /**
- * Called every time the mouse is moved.  If the mouse has moved to a new 
- * element, restore the original styling for the previous element and 
+ * Called every time the mouse is moved.  If the mouse has moved to a new
+ * element, restore the original styling for the previous element and
  * add the highlighted styles for the new element.
  */
 function onMouseMove(evt) {
@@ -26,7 +26,7 @@ function onMouseMove(evt) {
       resetOldStyles();
       saveElementStyles(elem, ['-webkit-box-shadow', 'cursor', 'border']);
       setStyleList(elem, {
-          '-webkit-box-shadow': '0 2px 6px #f66', 
+          '-webkit-box-shadow': '0 2px 6px #f66',
           'cursor': 'pointer',
           'border': '2px solid #f00'
       });
@@ -46,7 +46,7 @@ function resetOldStyles() {
 };
 
 /**
- * Given an element and a list of style names, saves the current values of 
+ * Given an element and a list of style names, saves the current values of
  * each style, along with a reference to the element.
  */
 function saveElementStyles(elem, styles) {
@@ -61,14 +61,14 @@ function setFont(elem, font) {
   window.removeEventListener('mousemove', onMouseMove, true);
   resetOldStyles();
   setStyleList = function() {};
-  
+
   var link = document.createElement('link');
   link.rel = "stylesheet";
   link.type = "text/css";
-  link.href = "http://fonts.googleapis.com/css?family=" + 
+  link.href = "http://fonts.googleapis.com/css?family=" +
               encodeURIComponent(font);
-  document.head.appendChild(link);  
-  
+  document.head.appendChild(link);
+
   var elemqueue = [elem];
   while (elemqueue.length > 0) {
     var e = elemqueue.shift();
@@ -80,7 +80,7 @@ function setFont(elem, font) {
 };
 
 /**
- * Given an element and a dictionary of css/value pairs, sets the element's 
+ * Given an element and a dictionary of css/value pairs, sets the element's
  * style to the values in the dictionary.
  */
 function setStyleList(elem, styles) {

@@ -3,7 +3,7 @@
   <head>
     <script>
       window.CSSTEXT = null;
-      
+
       function fetchCSS(filename) {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function(data) {
@@ -24,7 +24,7 @@
           sendResponse(false);
         }
       };
-      
+
       fetchCSS('backgroundimage.css');
       chrome.extension.onRequest.addListener(onRequest);
     </script>

@@ -18,5 +18,5 @@ dom_script.innerText = [
   'jqueryBlock.innerText = window.hasOwnProperty("jQuery") && jQuery.fn.jquery || "Could not find jQuery!";',
   'jqueryBlock.dispatchEvent(jqueryEvent);'
 ].join('\n');
-  
+
 document.body.appendChild(dom_script);

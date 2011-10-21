@@ -55,7 +55,7 @@ class TagSet:
         self.__superTags = superTags
         self.__hashedSuperTags = hash(superTags)
         self.__lenOfSuperTags = len(superTags)
-        
+
     def __repr__(self):
         return '%s(%s)' % (
             self.__class__.__name__,
@@ -113,5 +113,5 @@ class TagSet:
                 return
             idx = idx - 1
         return 1
-    
+
 def initTagSet(tag): return TagSet(tag, tag)

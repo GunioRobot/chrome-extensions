@@ -14,7 +14,7 @@ class Asn1Item: pass
 class Asn1ItemBase(Asn1Item):
     # Set of tags for this ASN.1 type
     tagSet = ()
-    
+
     # A list of constraint.Constraint instances for checking values
     subtypeSpec = constraint.ConstraintsIntersection()
 
@@ -27,15 +27,15 @@ class Asn1ItemBase(Asn1Item):
             self._subtypeSpec = self.subtypeSpec
         else:
             self._subtypeSpec = subtypeSpec
-        
+
     def _verifySubtypeSpec(self, value, idx=None):
         self._subtypeSpec(value, idx)
-        
+
     def getSubtypeSpec(self): return self._subtypeSpec
-    
+
     def getTagSet(self): return self._tagSet
     def getTypeMap(self): return { self._tagSet: self }
-    
+
     def isSameTypeWith(self, other):
         return self is other or \
                self._tagSet == other.getTagSet() and \
@@ -51,7 +51,7 @@ class __NoValue:
 noValue = __NoValue()
 
 # Base class for "simple" ASN.1 objects. These are immutable.
-class AbstractSimpleAsn1Item(Asn1ItemBase):    
+class AbstractSimpleAsn1Item(Asn1ItemBase):
     defaultValue = noValue
     def __init__(self, value=None, tagSet=None, subtypeSpec=None):
         Asn1ItemBase.__init__(self, tagSet, subtypeSpec)
@@ -113,7 +113,7 @@ class AbstractSimpleAsn1Item(Asn1ItemBase):
     def prettyPrint(self, scope=0): return self.prettyOut(self._value)
     # XXX Compatibility stub
     def prettyPrinter(self, scope=0): return self.prettyPrint(scope)
-    
+
 #
 # Constructed types:
 # * There are five of them: Sequence, SequenceOf/SetOf, Set and Choice
@@ -166,7 +166,7 @@ class AbstractConstructedAsn1Item(Asn1ItemBase):
 
     def _cloneComponentValues(self, myClone, cloneValueFlag): pass
 
-    def clone(self, tagSet=None, subtypeSpec=None, sizeSpec=None, 
+    def clone(self, tagSet=None, subtypeSpec=None, sizeSpec=None,
               cloneValueFlag=None):
         if tagSet is None:
             tagSet = self._tagSet
@@ -214,5 +214,5 @@ class AbstractConstructedAsn1Item(Asn1ItemBase):
     def __getitem__(self, idx): return self._componentValues[idx]
 
     def __len__(self): return len(self._componentValues)
-    
+
     def clear(self): self._componentValues = []

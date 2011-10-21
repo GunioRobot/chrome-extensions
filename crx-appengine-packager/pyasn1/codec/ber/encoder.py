@@ -45,7 +45,7 @@ class AbstractItemEncoder:
             return ''
         else:
             return encodeFun(eoo.endOfOctets, defMode)
-        
+
     def encode(self, encodeFun, value, defMode, maxChunkSize):
         substrate, isConstructed = self._encodeValue(
             encodeFun, value, defMode, maxChunkSize
@@ -139,7 +139,7 @@ class NullEncoder(AbstractItemEncoder):
 
 class ObjectIdentifierEncoder(AbstractItemEncoder):
     supportIndefLenMode = 0
-    def _encodeValue(self, encodeFun, value, defMode, maxChunkSize):    
+    def _encodeValue(self, encodeFun, value, defMode, maxChunkSize):
         oid = tuple(value)
         if len(oid) < 2:
             raise error.PyAsn1Error('Short OID %s' % value)
@@ -170,12 +170,12 @@ class ObjectIdentifierEncoder(AbstractItemEncoder):
                 subid = subid >> 7
                 while subid > 0:
                     res.insert(0, chr(0x80 | (subid & 0x7f)))
-                    subid = subid >> 7 
+                    subid = subid >> 7
                 # Convert packed Sub-Object ID to string and add packed
                 # it to resulted Object ID
                 octets.append(string.join(res, ''))
         return string.join(octets, ''), 0
-    
+
 class SequenceOfEncoder(AbstractItemEncoder):
     def _encodeValue(self, encodeFun, value, defMode, maxChunkSize):
         if hasattr(value, 'setDefaultComponents'):
@@ -221,7 +221,7 @@ codecMap = {
     char.BMPString.tagSet: OctetStringEncoder(),
     # useful types
     useful.GeneralizedTime.tagSet: OctetStringEncoder(),
-    useful.UTCTime.tagSet: OctetStringEncoder()        
+    useful.UTCTime.tagSet: OctetStringEncoder()
     }
 
 class Encoder:

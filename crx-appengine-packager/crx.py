@@ -29,15 +29,15 @@ from google.appengine.ext import db
 
 class Zipper(object):
   """ Handles creating zip files. """
-  
+
   def zip(self, path):
-    """ Returns the contents of a path as a binary string reprentation of a 
+    """ Returns the contents of a path as a binary string reprentation of a
     zip file."""
     zip_buffer = StringIO.StringIO()
     zip_file = zipfile.ZipFile(zip_buffer, 'w')
     try:
       for root, dirs, files in os.walk(path):
-        for file in files:  
+        for file in files:
           # Absolute path to the file to be added.
           abspath = os.path.realpath(os.path.join(root, file))
           # Write a relative path into the zip file.
@@ -53,12 +53,12 @@ class Zipper(object):
 
 class SigningKey(db.Model):
   """ Represents an RSA key that can be used to sign an extension.
-  
+
   The first time getOrCreate is called, a new key is generated and stored in
   the data store.  Subsequent calls will return the original key."""
-  
+
   blob = db.BlobProperty()
-    
+
   def toBitString_(self, num):
     """ Converts a long into the bit string. """
     buf = ''
@@ -71,7 +71,7 @@ class SigningKey(db.Model):
   def getRSAKey(self):
     """ Gets a data structure representing an RSA public+private key. """
     return pickle.loads(self.blob)
-    
+
   def getRSAPublicKey(self):
     """ Gets an ASN.1-encoded form of this RSA key's public key. """
     # Get a RSAPublicKey structure
@@ -79,7 +79,7 @@ class SigningKey(db.Model):
     rsakey = self.getRSAKey()
     pkinfo.setComponentByPosition(0, univ.Integer(rsakey.n))
     pkinfo.setComponentByPosition(1, univ.Integer(rsakey.e))
-    
+
     # Encode the public key info as a bit string
     pklong = long(encoder.encode(pkinfo).encode('hex'), 16)
     pkbitstring = univ.BitString("'00%s'B" % self.toBitString_(pklong))
@@ -100,7 +100,7 @@ class SigningKey(db.Model):
     # Encode the public key structure
     publickey = encoder.encode(publickeyinfo)
     return publickey
-    
+
   @staticmethod
   def getOrCreate():
     """ Returns a signing key from the data store or creates one if it doesn't
@@ -118,7 +118,7 @@ class SigningKey(db.Model):
 
 class Packager(object):
   """ Handles creating CRX files. """
-  
+
   def package(self, zip_string, key):
     """ Packages a zip file into a CRX, given a signing key. """
     # Obtain the hash of the zip file contents
@@ -137,18 +137,18 @@ class Packager(object):
 
     # Encode the sequence into ASN.1
     digest = encoder.encode(digestinfo)
-    
+
     # Pad the hash
     paddinglength = 128 - 3 - len(digest)
     paddedhexstr = "0001%s00%s" % (paddinglength * 'ff', digest.encode('hex'))
-    
+
     # Calculate the signature
     signature_bytes = key.getRSAKey().sign(paddedhexstr.decode('hex'), "")[0]
     signature = ('%X' % signature_bytes).decode('hex')
-    
+
     # Get the public key
     publickey = key.getRSAPublicKey()
-    
+
     # Write the actual CRX contents
     crx_buffer = StringIO.StringIO("wb")
     crx_buffer.write("Cr24")  # Extension file magic number, from the CRX focs

@@ -4,8 +4,8 @@
  *
  * Part of the Python Cryptography Toolkit
  *
- * Distribute and use freely; there are no restrictions on further 
- * dissemination and usage except those imposed by the laws of your 
+ * Distribute and use freely; there are no restrictions on further
+ * dissemination and usage except those imposed by the laws of your
  * country of residence.
  *
  */
@@ -21,7 +21,7 @@
 #define MODULE_NAME Blowfish
 #define BLOCK_SIZE 8
 #define KEY_SIZE 0
-  
+
 /* Define IntU32 to be an unsigned in 32 bits long */
 typedef unsigned int IntU32 ;
 typedef unsigned char IntU8 ;
@@ -38,9 +38,9 @@ typedef struct
 {
 	IntU32 p[2][NROUNDS+2],
 		sbox[4][256] ;
-} BFkey_type ; 
+} BFkey_type ;
 
-typedef struct 
+typedef struct
 {
 	BFkey_type bfkey;
 } block_state;
@@ -49,7 +49,7 @@ typedef struct
     Data to initialize P and S in BlowFish.
 */
 
-static IntU32 p_init[NROUNDS+2] = 
+static IntU32 p_init[NROUNDS+2] =
 {
 	608135816UL, 2242054355UL,  320440878UL,   57701188UL,
 	2752067618UL,  698298832UL,  137296536UL, 3964562569UL,
@@ -325,32 +325,32 @@ static IntU32  s_init[4][256] = {
 */
 #define sub(s,n) *((IntU32 *)((IntP)s+(n)))
 
-/* Below is one BlowFish round including the F function 
+/* Below is one BlowFish round including the F function
 */
 #define bf_round(l,r,n) \
        l ^= P[n]; \
        r ^= ( (sub(S[0],l>>22 & 0x3fc) + sub(S[1],l>>14 & 0x3fc)) \
-	      ^ sub(S[2],l>>6 & 0x3fc) ) +S[3][l & 0xff] 
+	      ^ sub(S[2],l>>6 & 0x3fc) ) +S[3][l & 0xff]
 
 
 
-/* This function requires the block to be two 32 bit integers, in 
-whatever endian form the machine uses.  On little endian machines 
+/* This function requires the block to be two 32 bit integers, in
+whatever endian form the machine uses.  On little endian machines
 use crypt_8bytes() on user data.  make_bfkey should call crypt_block
 on either endian machine.  Pass direction 0 to encrypt, 1 to decrypt.
 */
-static void crypt_block(IntU32 block[2], BFkey_type *bfkey, int direction) 
+static void crypt_block(IntU32 block[2], BFkey_type *bfkey, int direction)
 {
-	register IntU32 left, right, 
-		(*S)[256], 
-		*P ; 
-                  
-	left = block[0] ; right = block[1] ; 
+	register IntU32 left, right,
+		(*S)[256],
+		*P ;
 
-	S = bfkey->sbox ; 
+	left = block[0] ; right = block[1] ;
+
+	S = bfkey->sbox ;
 	P = bfkey->p[direction] ;
 
-	bf_round( left, right,  0 ) ;   bf_round( right, left,  1 ) ;  
+	bf_round( left, right,  0 ) ;   bf_round( right, left,  1 ) ;
 	bf_round( left, right,  2 ) ;   bf_round( right, left,  3 ) ;
 	bf_round( left, right,  4 ) ;   bf_round( right, left,  5 ) ;
 	bf_round( left, right,  6 ) ;   bf_round( right, left,  7 ) ;
@@ -371,7 +371,7 @@ static void crypt_block(IntU32 block[2], BFkey_type *bfkey, int direction)
    in dest.  They can be the same.  It takes the same direction
    parameter as crypt_block().
 */
-static void crypt_8bytes(IntU8 *source, IntU8 *dest, BFkey_type *bfkey, 
+static void crypt_8bytes(IntU8 *source, IntU8 *dest, BFkey_type *bfkey,
 			 int direction)
 {
 	IntU32  block[2] ;
@@ -397,7 +397,7 @@ static void crypt_8bytes(IntU8 *source, IntU8 *dest, BFkey_type *bfkey,
    to the crypt functions.  It does some simple testing of the
    init data and crypt routine, and returns 0 on error.
 */
-static void make_bfkey(unsigned char *key_string, int keylength, 
+static void make_bfkey(unsigned char *key_string, int keylength,
 		       BFkey_type *bfkey)
 {
 	int       i, j, k ;
@@ -418,7 +418,7 @@ static void make_bfkey(unsigned char *key_string, int keylength,
 		{
 			bfkey->sbox[i][j] = s_init[i][j] ;
 			checksum = ((checksum*13)<<11 | (checksum*13)>>21)
-				+ s_init[i][j] ;	 
+				+ s_init[i][j] ;
 		}
 
 	/* Test init data. */
@@ -445,20 +445,20 @@ static void make_bfkey(unsigned char *key_string, int keylength,
 		return;
 	}
 
-   
+
 	/* Xor key string into encryption key vector */
 	j = 0 ;
-	for (i=0 ; i<NROUNDS+2 ; ++i) 
+	for (i=0 ; i<NROUNDS+2 ; ++i)
 	{
 		IntU32 data;
 		data = 0 ;
-		for (k=0 ; k<4 ; ++k ) 
+		for (k=0 ; k<4 ; ++k )
 			data = (data << 8) | key_string[j++ % keylength];
-		(bfkey->p)[0][i] ^= data; 
+		(bfkey->p)[0][i] ^= data;
 	}
 
 
-	for (i = 0 ; i<NROUNDS+2 ; i+=2) 
+	for (i = 0 ; i<NROUNDS+2 ; i+=2)
 	{
 		crypt_block( dspace, bfkey, 0 ) ;
 		bfkey->p[0][i] = dspace[0] ;
@@ -466,9 +466,9 @@ static void make_bfkey(unsigned char *key_string, int keylength,
 		bfkey->p[0][i+1] = dspace[1] ;
 		bfkey->p[1][NROUNDS-i] = dspace[1] ;
 	}
-   
+
 	for ( i=0 ; i<4 ; ++i )
-		for ( j=0 ; j<256 ; j+=2 ) 
+		for ( j=0 ; j<256 ; j+=2 )
 		{
 			crypt_block( dspace, bfkey, 0 ) ;
 			bfkey->sbox[i][j] = dspace[0] ;
@@ -490,7 +490,7 @@ block_decrypt(block_state *self, unsigned char *in, unsigned char *out)
 	crypt_8bytes(in, out, &(self->bfkey), 1);
 }
 
-static void 
+static void
 block_init(block_state *self, unsigned char *key, int keylength)
 {
 	make_bfkey(key, keylength, &(self->bfkey));

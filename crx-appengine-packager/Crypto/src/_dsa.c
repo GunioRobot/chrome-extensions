@@ -4,8 +4,8 @@
  *
  * Part of the Python Cryptography Toolkit
  *
- * Distribute and use freely; there are no restrictions on further 
- * dissemination and usage except those imposed by the laws of your 
+ * Distribute and use freely; there are no restrictions on further
+ * dissemination and usage except those imposed by the laws of your
  * country of residence.
  *
  */

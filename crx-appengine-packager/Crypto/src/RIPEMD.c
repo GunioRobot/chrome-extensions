@@ -128,7 +128,7 @@ static void hash_init(hash_state *rmdInfo)
 /* Initialization of the 5-word MDbuf array to the magic
    initialization constants
  */
-{  
+{
 	MDinit(rmdInfo->digest);
 	rmdInfo->countLo = rmdInfo->countHi =rmdInfo->nbytes =  0;
 }
@@ -163,9 +163,9 @@ static void hash_update(hash_state *shsInfo,char *buffer, int count)
 		for(i=0; i<16; i++)
 		{
 			long t = htonl(shsInfo->data[i]);
-			t = ( ((t>>24) & 0xff)  + 
-			      (((t>>16) & 0xff)<<8) + 
-			      (((t>> 8) & 0xff)<<16) + 
+			t = ( ((t>>24) & 0xff)  +
+			      (((t>>16) & 0xff)<<8) +
+			      (((t>> 8) & 0xff)<<16) +
 			      (((t    ) & 0xff)<<24) );
 			shsInfo->data[i] = t;
 		}
@@ -181,9 +181,9 @@ static void hash_update(hash_state *shsInfo,char *buffer, int count)
 		for(i=0; i<16; i++)
 		{
 			long t = htonl(shsInfo->data[i]);
-			t = ( ((t>>24) & 0xff)  + 
-			      (((t>>16) & 0xff)<<8) + 
-			      (((t>> 8) & 0xff)<<16) + 
+			t = ( ((t>>24) & 0xff)  +
+			      (((t>>16) & 0xff)<<8) +
+			      (((t>> 8) & 0xff)<<16) +
 			      (((t    ) & 0xff)<<24) );
 			shsInfo->data[i] = t;
 		}
@@ -201,7 +201,7 @@ static PyObject *hash_digest(hash_state *self)
 	hash_state temp;
 	int i;
 	byte   hashcode[RMDsize/8]; /* final hash-value             */
-  
+
 	temp.countLo=self->countLo;
 	temp.countHi=self->countHi;
 	for(i=0; i<5; i++) temp.digest[i]=self->digest[i];
@@ -453,7 +453,7 @@ static void MDcompress(word *MDbuf, word *X)
 
 /********************************************************************/
 static void MDfinish( hash_state *shsInfo)
-/* The final value of the 5-word MDbuf array is calculated. 
+/* The final value of the 5-word MDbuf array is calculated.
    lswlen and mswlen contain, respectively, the least and most significant
    32 bits of the message bit length mod 2^64, and string is an incomplete
    block containing the (lswlen mod 512) remaining message bits.
@@ -502,6 +502,6 @@ static void MDfinish( hash_state *shsInfo)
 	X[15] = mswlen;
 	MDcompress(MDbuf, X);
 }
- 	
+
 
 #include "hash_template.c"

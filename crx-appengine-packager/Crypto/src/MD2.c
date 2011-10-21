@@ -4,12 +4,12 @@
  *
  * Part of the Python Cryptography Toolkit
  *
- * Distribute and use freely; there are no restrictions on further 
- * dissemination and usage except those imposed by the laws of your 
+ * Distribute and use freely; there are no restrictions on further
+ * dissemination and usage except those imposed by the laws of your
  * country of residence.
  *
  */
-  
+
 
 #include <string.h>
 #include "Python.h"
@@ -57,7 +57,7 @@ static U8 S[256] = {
 static void
 hash_copy(hash_state *src, hash_state *dest)
 {
-	dest->count=src->count;  
+	dest->count=src->count;
 	memcpy(dest->buf, src->buf, dest->count);
 	memcpy(dest->X, src->X, 48);
 	memcpy(dest->C, src->C, 16);
@@ -67,18 +67,18 @@ hash_copy(hash_state *src, hash_state *dest)
 static void hash_update (hash_state *self, const U8 *buf, U32 len)
 {
 	U32 L;
-	while (len) 
+	while (len)
 	{
 		L=(16-self->count) < len ? (16-self->count) : len;
 		memcpy(self->buf+self->count, buf, L);
 		self->count+=L;
 		buf+=L;
 		len-=L;
-		if (self->count==16) 
+		if (self->count==16)
 		{
 			U8 t;
 			int i,j;
-	  
+
 			self->count=0;
 			memcpy(self->X+16, self->buf, 16);
 			t=self->C[15];
@@ -87,7 +87,7 @@ static void hash_update (hash_state *self, const U8 *buf, U32 len)
 				self->X[32+i]=self->X[16+i]^self->X[i];
 				t=self->C[i]^=S[self->buf[i]^t];
 			}
-	  
+
 			t=0;
 			for(i=0; i<18; i++)
 			{
@@ -106,7 +106,7 @@ hash_digest (const hash_state *self)
 	U32 padlen;
 	hash_state temp;
 	int i;
-  
+
 	memcpy(&temp, self, sizeof(hash_state));
 	padlen= 16-self->count;
 	for(i=0; i<padlen; i++) padding[i]=padlen;

@@ -4,8 +4,8 @@
  *
  * Part of the Python Cryptography Toolkit
  *
- * Distribute and use freely; there are no restrictions on further 
- * dissemination and usage except those imposed by the laws of your 
+ * Distribute and use freely; there are no restrictions on further
+ * dissemination and usage except those imposed by the laws of your
  * country of residence.
  *
  */
@@ -14,7 +14,7 @@
 #define BLOCK_SIZE 1
 #define KEY_SIZE 0
 
-typedef struct 
+typedef struct
 {
 	unsigned char key[32];
 	int keylen, last_pos;
@@ -24,7 +24,7 @@ static void
 stream_init(stream_state *self, unsigned char *key, int len)
 {
 	int i;
-  
+
 	if (32 <= len) len=32;
 	self->keylen = len;
 	self->last_pos = 0;
@@ -36,9 +36,9 @@ stream_init(stream_state *self, unsigned char *key, int len)
 }
 
 /* Encryption and decryption are symmetric */
-#define stream_decrypt stream_encrypt	
+#define stream_decrypt stream_encrypt
 
-static void stream_encrypt(stream_state *self, unsigned char *block, 
+static void stream_encrypt(stream_state *self, unsigned char *block,
 			   int len)
 {
 	int i, j = self->last_pos;

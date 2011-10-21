@@ -34,7 +34,7 @@ class SetOfEncoder(encoder.SequenceOfEncoder):
             getattr(c1, 'getMinimalTagSet', c1.getTagSet)(),
             getattr(c2, 'getMinimalTagSet', c2.getTagSet)()
             )
-    
+
     def _encodeValue(self, encodeFun, client, defMode, maxChunkSize):
         if hasattr(client, 'setDefaultComponents'):
             client.setDefaultComponents()
@@ -75,11 +75,11 @@ codecMap.update({
     # Set & SetOf have same tags
     univ.SetOf().tagSet: SetOfEncoder()
     })
-        
+
 class Encoder(encoder.Encoder):
     def __call__(self, client, defMode=0, maxChunkSize=0):
         return encoder.Encoder.__call__(self, client, defMode, maxChunkSize)
-        
+
 encode = Encoder(codecMap)
 
 # EncoderFactory queries class instance and builds a map of tags -> encoders

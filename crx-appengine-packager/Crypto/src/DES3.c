@@ -4,12 +4,12 @@
  *
  * Part of the Python Cryptography Toolkit
  *
- * Distribute and use freely; there are no restrictions on further 
- * dissemination and usage except those imposed by the laws of your 
+ * Distribute and use freely; there are no restrictions on further
+ * dissemination and usage except those imposed by the laws of your
  * country of residence.
  *
  */
-  
+
 /* des.c */
 /* Copyright (C) 1993 Eric Young */
 /* Integrated into the PCT by A.M. Kuchling, November 1994 */
@@ -434,7 +434,7 @@ typedef struct des_ks_struct
 #define _	ks._
 } des_key_schedule[16];
 
-typedef struct 
+typedef struct
 {
 	des_key_schedule KeySched1, KeySched2, KeySched3;
 } block_state;
@@ -537,31 +537,31 @@ static int des_ecb_encrypt(des_cblock *input, des_cblock *output,
 }
 
 
-     
-static void block_decrypt(block_state *self, 
+
+static void block_decrypt(block_state *self,
 			  unsigned char *in,
 			  unsigned char *out)
 {
 	des_cblock output, output2;
-  
+
 	des_ecb_encrypt((des_cblock *)in, &output, self->KeySched3, 0);
 	des_ecb_encrypt(&output, &output2, self->KeySched2, 1);
 	des_ecb_encrypt(&output2, (des_cblock *)out, self->KeySched1, 0);
 }
 
-static void block_encrypt(block_state *self, 
+static void block_encrypt(block_state *self,
 			  unsigned char *in,
 			  unsigned char *out)
 {
 	des_cblock output, output2;
-  
+
 	des_ecb_encrypt((des_cblock *)in, &output, self->KeySched1, 1);
 	des_ecb_encrypt(&output, &output2, self->KeySched2, 0);
 	des_ecb_encrypt(&output2, (des_cblock *)out, self->KeySched3, 1);
 }
 
 /* NOW DEFINED IN des_local.h
- * See ecb_encrypt.c for a pseudo description of these macros. 
+ * See ecb_encrypt.c for a pseudo description of these macros.
  * #define PERM_OP(a,b,t,n,m) ((t)=((((a)>>(n))^(b))&(m)),\
  * 	(b)^=(t),\
  * 	(a)=((a)^((t)<<(n))))
@@ -585,7 +585,7 @@ static int des_set_key(des_cblock *key, des_key_schedule schedule)
 	c2l(in,c);
 	c2l(in,d);
 
-	/* do PC1 in 60 simple operations */ 
+	/* do PC1 in 60 simple operations */
 /*	PERM_OP(d,c,t,4,0x0f0f0f0f);
 	HPERM_OP(c,t,-2, 0xcccc0000);
 	HPERM_OP(c,t,-1, 0xaaaa0000);
@@ -634,7 +634,7 @@ static int des_set_key(des_cblock *key, des_key_schedule schedule)
 		/* table contained 0213 4657 */
 		*(k++)=((t<<16)|(s&0x0000ffff))&0xffffffff;
 		s=     ((s>>16)|(t&0xffff0000));
-		
+
 		s=(s<<4)|(s>>28);
 		*(k++)=s&0xffffffff;
 	}
@@ -659,12 +659,12 @@ static const unsigned char odd_parity[256]={
 	224,224,227,227,229,229,230,230,233,233,234,234,236,236,239,239,
 	241,241,242,242,244,244,247,247,248,248,251,251,253,253,254,254};
 
-static void block_init(block_state *self, unsigned char *key, 
+static void block_init(block_state *self, unsigned char *key,
 		       int keylength)
 {
 	char oddkey[24];
 	int i;
-  
+
 	if (keylength != 16 && keylength != 24) {
 		PyErr_SetString(PyExc_ValueError,
 				"DES3 key must be either 16 or 24 bytes long");
@@ -680,7 +680,7 @@ static void block_init(block_state *self, unsigned char *key,
 	if (keylength == 24) {
 		des_set_key((des_cblock *)(oddkey+16), self->KeySched3);
 	} else {
-                memcpy(self->KeySched3, self->KeySched1, 
+                memcpy(self->KeySched3, self->KeySched1,
                        sizeof(self->KeySched3));
 	}
 }

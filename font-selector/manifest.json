@@ -3,7 +3,7 @@
   "version" : "1.0.0",
   "description" : "Select an item and change its font",
   "background_page" : "background.html",
-  "permissions" : [ 
+  "permissions" : [
     "contextMenus",
     "tabs",
     "http://*/*"

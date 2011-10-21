@@ -14,27 +14,27 @@
         IDLE   : 'idle',
         LOCKED : 'locked'
       };
-      
+
       var TIMEOUT = {
         ACTIVE : 1 * 60 * 1000,  // Ping every 1 minute for active accts.
         IDLE : 10 * 60 * 1000    // Ping every 10 minutes for idle accts.
       };
-      
+
       function Poller(url, timeout, callback) {
         this.url = url;
         this.timeout = TIMEOUT.ACTIVE;
         this.callback = callback;
         this.active = false;
         this.threshold = 60; // One minute until idle
-        chrome.idle.onStateChanged.addListener(this.onState.bind(this));        
+        chrome.idle.onStateChanged.addListener(this.onState.bind(this));
       };
-      
+
       Poller.prototype.onState = function(newState) {
         if (newState == STATE.ACTIVE) {
           this.timeout = TIMEOUT.ACTIVE;
         }
       };
-      
+
       Poller.prototype.poll = function() {
         if (!this.active) return;
         var xhr = new XMLHttpRequest();
@@ -57,24 +57,24 @@
         xhr.open('GET', this.url, false);
         xhr.send();
       };
-      
+
       Poller.prototype.start = function() {
         this.active = true;
         this.poll();
       };
-      
+
       Poller.prototype.stop = function() {
         this.active = false;
       };
-      
+
       Poller.prototype.setTimeout = function(timeout) {
         this.timeout = timeout;
       };
-      
+
       var callback = function(evt) {
         console.log('Loaded', evt);
       };
-      
+
       var poller = new Poller('http://localhost:5103', 60000, callback);
       poller.start();
     </script>

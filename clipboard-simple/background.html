@@ -11,8 +11,8 @@
     <script>
       /**
        * See http://crbug.com/32363 for context.
-       * Run with 
-       *   --enable-experimental-extension-apis    
+       * Run with
+       *   --enable-experimental-extension-apis
        */
       chrome.browserAction.onClicked.addListener(function (tab) {
         chrome.experimental.clipboard.executeCopy(tab.id, function () {
@@ -21,7 +21,7 @@
         chrome.experimental.clipboard.executePaste(tab.id, function () {
           console.log("Paste");
         });
-        
+
       });
     </script>
   </body>

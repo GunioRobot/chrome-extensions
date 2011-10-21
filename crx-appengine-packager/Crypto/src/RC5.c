@@ -3,8 +3,8 @@
  *
  * Part of the Python Cryptography Toolkit
  *
- * Distribute and use freely; there are no restrictions on further 
- * dissemination and usage except those imposed by the laws of your 
+ * Distribute and use freely; there are no restrictions on further
+ * dissemination and usage except those imposed by the laws of your
  * country of residence.
  *
  */
@@ -14,8 +14,8 @@
 #define MODULE_NAME RC5
 #define BLOCK_SIZE 8
 #define KEY_SIZE 0
-#define PCT_RC5_MODULE          /* Define this to get RC5's additional 
-				   keywords */ 
+#define PCT_RC5_MODULE          /* Define this to get RC5's additional
+				   keywords */
 #define MAXTABLE 100		/* Maximum size of S-box table; changing this
 				   affects the maximum number of rounds
 				   possible. */
@@ -31,7 +31,7 @@ typedef unsigned int U32;
 
 
 
-typedef struct 
+typedef struct
 {
 	int version;			/* Version number of algorithm */
 	int word_size;			/* Word size */
@@ -45,7 +45,7 @@ block_init(block_state *self, unsigned char *key, int keylen)
 {
 	unsigned int P = 0, Q = 0;
 	int i;
-  
+
 	switch(self->word_size)
 	{
 	case(16):
@@ -62,7 +62,7 @@ block_init(block_state *self, unsigned char *key, int keylen)
 		int j, t=2*(self->rounds+1), c=(keylen-1)/u;
 		if ((keylen-1) % u) c++;
 		L=malloc(sizeof(unsigned int)*c);
-		if (L==NULL) 
+		if (L==NULL)
 		{
 			PyErr_SetString(PyExc_MemoryError,
 					"RC5: Can't allocate memory");
@@ -73,7 +73,7 @@ block_init(block_state *self, unsigned char *key, int keylen)
 		for(i=1; i<t; i++) self->S[i]=(self->S[i-1]+Q) & self->mask;
 		i=j=0;
 		A=B=0;
-		for(num = (t>c) ? 3*t : 3*c; 0<num; num--) 
+		for(num = (t>c) ? 3*t : 3*c; 0<num; num--)
 		{
 			LEFT(A, self->S[i]+A+B, 3, self->word_size, self->mask);
 			self->S[i]=A;
@@ -95,7 +95,7 @@ static void RC5Encipher(block_state *self, U32 *Aptr, U32 *Bptr)
 	B=(*Bptr+self->S[1]) & self->mask;
 
 	if (self->rounds)
-		for (i=2; i<=2*self->rounds; i+=2) 
+		for (i=2; i<=2*self->rounds; i+=2)
 		{
 			LEFT(A,A^B,B,self->word_size,self->mask);
 			A += self->S[i];
@@ -106,7 +106,7 @@ static void RC5Encipher(block_state *self, U32 *Aptr, U32 *Bptr)
 	*Bptr=B;
 }
 
-static void RC5Decipher(block_state *self, unsigned int *Aptr, 
+static void RC5Decipher(block_state *self, unsigned int *Aptr,
 			unsigned int *Bptr)
 {
 	int i;
@@ -116,7 +116,7 @@ static void RC5Decipher(block_state *self, unsigned int *Aptr,
 	B=*Bptr;
 
 	if (self->rounds)
-		for (i=2*self->rounds; 2<=i; i-=2) 
+		for (i=2*self->rounds; 2<=i; i-=2)
 		{
 			RIGHT(B,B-self->S[i+1],A,self->word_size,self->mask);
 			B ^= A;
@@ -125,7 +125,7 @@ static void RC5Decipher(block_state *self, unsigned int *Aptr,
 		}
 	A = (A-self->S[0]) & self->mask;
 	B = (B-self->S[1]) & self->mask;
-	if (self->word_size==32) 
+	if (self->word_size==32)
 	{
 		*Aptr=A;
 		*Bptr=B;
@@ -141,21 +141,21 @@ static void block_encrypt(block_state *self, unsigned char *in,
 			  unsigned char *out)
 {
 	U32 A,B;
-  
+
 	switch(self->word_size)
 	{
 	case (32):
 		A=in[0] | in[1]<<8 | in[2]<<16 | in[3]<<24;
 		B=in[4] | in[5]<<8 | in[6]<<16 | in[7]<<24;
 		RC5Encipher(self, &A, &B);
-		out[0]=A & 255; A>>=8;      
-		out[1]=A & 255; A>>=8;      
-		out[2]=A & 255; A>>=8;      
-		out[3]=A; 
-		out[4]=B & 255; B>>=8;      
-		out[5]=B & 255; B>>=8;      
-		out[6]=B & 255; B>>=8;      
-		out[7]=B; 
+		out[0]=A & 255; A>>=8;
+		out[1]=A & 255; A>>=8;
+		out[2]=A & 255; A>>=8;
+		out[3]=A;
+		out[4]=B & 255; B>>=8;
+		out[5]=B & 255; B>>=8;
+		out[6]=B & 255; B>>=8;
+		out[7]=B;
 		break;
 	case (16):
 		A=in[0] + in[1]*256;
@@ -163,11 +163,11 @@ static void block_encrypt(block_state *self, unsigned char *in,
 		RC5Encipher(self, &A, &B);
 		out[0] = A & 255; out[1] = A>>8;
 		out[2] = B & 255; out[3] = B>>8;
-      
+
 		A=in[4] + in[5]*256;
 		B=in[6] + in[7]*256;
 		RC5Encipher(self, &A, &B);
-		out[4] = A & 255; out[5] = A>>8; 
+		out[4] = A & 255; out[5] = A>>8;
 		out[6] = B & 255; out[7] = B>>8;
 		break;
 	}
@@ -177,21 +177,21 @@ static void block_decrypt(block_state *self, unsigned char *in,
 			  unsigned char *out)
 {
 	U32 A,B;
-  
+
 	switch(self->word_size)
 	{
 	case (32):
 		A=in[0] | in[1]<<8 | in[2]<<16 | in[3]<<24;
 		B=in[4] | in[5]<<8 | in[6]<<16 | in[7]<<24;
 		RC5Decipher(self, &A, &B);
-		out[0]=A & 255; A>>=8;      
-		out[1]=A & 255; A>>=8;      
-		out[2]=A & 255; A>>=8;      
-		out[3]=A; 
-		out[4]=B & 255; B>>=8;      
-		out[5]=B & 255; B>>=8;      
-		out[6]=B & 255; B>>=8;      
-		out[7]=B; 
+		out[0]=A & 255; A>>=8;
+		out[1]=A & 255; A>>=8;
+		out[2]=A & 255; A>>=8;
+		out[3]=A;
+		out[4]=B & 255; B>>=8;
+		out[5]=B & 255; B>>=8;
+		out[6]=B & 255; B>>=8;
+		out[7]=B;
 		break;
 	case (16):
 		A=in[0] + in[1]*256;
@@ -199,7 +199,7 @@ static void block_decrypt(block_state *self, unsigned char *in,
 		RC5Decipher(self, &A, &B);
 		out[0] = A & 255; out[1] = A>>8;
 		out[2] = B & 255; out[3] = B>>8;
-      
+
 		A=in[4] + in[5]*256;
 		B=in[6] + in[7]*256;
 		RC5Decipher(self, &A, &B);

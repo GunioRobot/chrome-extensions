@@ -9,7 +9,7 @@ certainly not change in an incompatible way in the future; all that remains
 to be done is to fix any bugs that show up.  If you encounter a bug, please
 report it in the SourceForge bug tracker at
        https://sourceforge.net/tracker/?group_id=20937&atid=120937
-  
+
 An example usage of the MD5 module is:
 >>> from Crypto.Hash import MD5
 >>> hash=MD5.new()
@@ -39,7 +39,7 @@ to its arbitrary-length integers, public key algorithms are easily
 implemented.
 
 Development of the toolkit can be discussed on the pct mailing list;
-archives and instructions for subscribing at at 
+archives and instructions for subscribing at at
 <URL:http://www.amk.ca/mailman/listinfo/pct>.
 
 

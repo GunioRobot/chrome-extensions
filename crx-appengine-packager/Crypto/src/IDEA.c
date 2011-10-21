@@ -4,8 +4,8 @@
  *
  * Part of the Python Cryptography Toolkit
  *
- * Distribute and use freely; there are no restrictions on further 
- * dissemination and usage except those imposed by the laws of your 
+ * Distribute and use freely; there are no restrictions on further
+ * dissemination and usage except those imposed by the laws of your
  * country of residence.
  *
  */
@@ -42,7 +42,7 @@ typedef unsigned char byte;
 #define CONST
 #endif
 
-typedef struct 
+typedef struct
 {
 	word16 EK[6*8+4], DK[6*8+4];
 } block_state;
@@ -78,7 +78,7 @@ block_init(block_state *self, unsigned char *key, int dummy)
 {
 	int i, j;
 	uint16 t1, t2, t3;
-	word16 *DK, *EK;    
+	word16 *DK, *EK;
 
 	EK = self->EK;
 	for (j = 0; j < 8; j++) {
@@ -92,7 +92,7 @@ block_init(block_state *self, unsigned char *key, int dummy)
 		i &= 7;
 	}
 	EK = self->EK;
-	DK = self->DK+6*8+4;    
+	DK = self->DK+6*8+4;
 	t1 = mulInv(*EK++);
 	t2 = -*EK++;
 	t3 = -*EK++;
@@ -129,7 +129,7 @@ block_init(block_state *self, unsigned char *key, int dummy)
 
 /*      IDEA encryption/decryption algorithm */
 /* Note that in and out can be the same buffer */
-static void ideaCipher(block_state *self, byte *block_in, 
+static void ideaCipher(block_state *self, byte *block_in,
 		       byte *block_out, word16 const *key)
 {
 	register uint16 x1, x2, x3, x4, s2, s3;
@@ -179,18 +179,18 @@ static void ideaCipher(block_state *self, byte *block_in,
 }				/* ideaCipher */
 
 
-static void block_encrypt(block_state *self, 
-			  unsigned char *in, 
+static void block_encrypt(block_state *self,
+			  unsigned char *in,
 			  unsigned char *out)
 {
 	ideaCipher(self, in, out, self->EK);
 }
 
 static void block_decrypt(block_state *self,
-			  unsigned char *in, 
+			  unsigned char *in,
 			  unsigned char *out)
 {
 	ideaCipher(self, in, out, self->DK);
 }
-   
+
 #include "block_template.c"

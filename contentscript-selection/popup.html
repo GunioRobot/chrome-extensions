@@ -4,8 +4,8 @@
  * source code is governed by a BSD-style license that can be found in the
  * LICENSE file.
 -->
-<html> 
-  <head> 
+<html>
+  <head>
     <style>
       body {
         width: 400px;
@@ -15,7 +15,7 @@
         min-height: 200px;
         margin: 0 auto;
         background: #eee;
-        border: 0; 
+        border: 0;
         padding: 10px;
         font: 13px monospace;
       }
@@ -28,13 +28,13 @@
         chrome.extension.onRequest.removeListener(window.onSelection);
       };
     </script>
-  </head> 
-  <body> 
-    <textarea id="output-text">This should be replaced with the selected text</textarea> 
-    <textarea id="output-html">This should be replaced with the HTML of the common ancestor of the selected text</textarea> 
-    <script type="text/javascript"> 
+  </head>
+  <body>
+    <textarea id="output-text">This should be replaced with the selected text</textarea>
+    <textarea id="output-html">This should be replaced with the HTML of the common ancestor of the selected text</textarea>
+    <script type="text/javascript">
       chrome.extension.onRequest.addListener(onSelection);
-      chrome.tabs.executeScript(null, { file: "contentscript.js" }); 
+      chrome.tabs.executeScript(null, { file: "contentscript.js" });
     </script>
-  </body> 
+  </body>
 </html>

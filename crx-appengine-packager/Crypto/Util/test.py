@@ -29,7 +29,7 @@ def print_timing (size, delta, verbose):
             print 'Unable to measure time -- elapsed time too small'
         else:
             print '%.2f K/sec' % (size/delta)
-            
+
 def exerciseBlockCipher(cipher, verbose):
     import string, time
     try:

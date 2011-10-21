@@ -15,12 +15,12 @@ class NamedType:
         if idx == 0: return self.__name
         if idx == 1: return self.__type
         raise IndexError()
-    
+
 class OptionalNamedType(NamedType):
     isOptional = 1
 class DefaultedNamedType(NamedType):
     isDefaulted = 1
-    
+
 class NamedTypes:
     def __init__(self, *namedTypes):
         self.__namedTypes = namedTypes
@@ -33,14 +33,14 @@ class NamedTypes:
         for n in self.__namedTypes:
             r = r + '%s, ' % repr(n)
         return r + ')'
-    
+
     def __getitem__(self, idx): return self.__namedTypes[idx]
 
     def __nonzero__(self):
         if self.__namedTypes: return 1
         else: return 0
     def __len__(self): return len(self.__namedTypes)
-    
+
     def getTypeByPosition(self, idx):
         try:
             return self.__namedTypes[idx].getType()
@@ -59,7 +59,7 @@ class NamedTypes:
             return self.__tagMap[tagSet]
         except KeyError:
             raise error.PyAsn1Error('Type %s not found' % tagSet)
-        
+
     def getNameByPosition(self, idx):
         try:
             return self.__namedTypes[idx].getName()
@@ -90,7 +90,7 @@ class NamedTypes:
             else:
                 ambigiousTypes = (t, )
             self.__ambigiousTypes[idx] = apply(NamedTypes, ambigiousTypes)
-        
+
     def getTypeMapNearPosition(self, idx):
         if not self.__ambigiousTypes: self.__buildAmbigiousTagMap()
         try:
@@ -113,7 +113,7 @@ class NamedTypes:
                 if self.__minTagSet is None or tagSet < self.__minTagSet:
                     self.__minTagSet = tagSet
         return self.__minTagSet
-    
+
     def getTypeMap(self, uniq=None):
         if not self.__typeMap:
             for t in self.__namedTypes:

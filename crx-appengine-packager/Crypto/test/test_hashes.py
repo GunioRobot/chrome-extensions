@@ -50,7 +50,7 @@ class HashTest (TestScenario):
         s=obj.update(self.str_128k)
         end=time.time()
         delta = end-start
-        print hash_mod.__name__, ':', 
+        print hash_mod.__name__, ':',
         if delta == 0:
             print 'Unable to measure time -- elapsed time too small'
         else:

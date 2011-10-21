@@ -2,7 +2,7 @@
   "name": "Idle Poller",
   "version": "1.0.0",
   "description": "Changes network fetch period based on idle status.",
-  "permissions": [ 
+  "permissions": [
     "idle",
     "http://news.google.com/*"
   ],

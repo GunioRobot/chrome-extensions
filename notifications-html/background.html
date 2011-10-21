@@ -7,9 +7,9 @@
       function onBrowserAction(tab) {
         var url = chrome.extension.getURL("notification.html");
         console.log(url);
-        webkitNotifications.createHTMLNotification(url).show(); 
+        webkitNotifications.createHTMLNotification(url).show();
       };
-            
+
       chrome.browserAction.onClicked.addListener(onBrowserAction);
     </script>
   </body>

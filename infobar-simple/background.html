@@ -11,8 +11,8 @@
     <script>
       /**
        * See http://crbug.com/32363 for context.
-       * Run with 
-       *   --enable-experimental-extension-apis    
+       * Run with
+       *   --enable-experimental-extension-apis
        */
       chrome.browserAction.onClicked.addListener(function (tab) {
         chrome.experimental.infobars.show({ "tabId" : tab.id, "path" : "infobar.html" });

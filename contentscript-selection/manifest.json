@@ -5,7 +5,7 @@
   "browser_action": {
     "default_title": "",
     "default_icon": "sample-19.png",
-    "popup" : "popup.html"    
+    "popup" : "popup.html"
   },
   "permissions": [
     "tabs",

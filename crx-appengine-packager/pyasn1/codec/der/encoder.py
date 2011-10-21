@@ -21,5 +21,5 @@ codecMap.update({
 class Encoder(encoder.Encoder):
     def __call__(self, client, defMode=1, maxChunkSize=0):
         return encoder.Encoder.__call__(self, client, defMode, maxChunkSize)
-        
+
 encode = Encoder(codecMap)

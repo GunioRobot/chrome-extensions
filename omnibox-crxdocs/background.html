@@ -20,9 +20,9 @@
           return func.apply(scope, arguments);
         };
       };
-      
+
       //////////////////////////////////////////////////////////////////////////
-      
+
       /**
        * Holds the search index and exposes operations to search the API docs.
        * @constructor
@@ -30,7 +30,7 @@
       function APISearchCorpus() {
         this.corpus_ = [];
       };
-      
+
       /**
        * Adds an entry to the index.
        * @param {String} name Name of the function (e.g. chrome.tabs.get).
@@ -47,12 +47,12 @@
           'type' : type
         });
       };
-      
+
       /**
        * Locates a match from the supplied keywords against text.
        *
-       * Keywords are matched in the order supplied, and a non-overlapping 
-       * search is used.  The ranges are returned in a way that is easily 
+       * Keywords are matched in the order supplied, and a non-overlapping
+       * search is used.  The ranges are returned in a way that is easily
        * converted to the style array required by the omnibox API.
        *
        * @param {Array.<String>} keywords A list of keywords to check.
@@ -75,15 +75,15 @@
         }
         return ranges;
       };
-      
+
       /**
        * Searches this corpus for the supplied text.
        * @param {String} text Query text.
        * @param {Number} limit Max results to return.
-       * @returns {Array.<Object>} A list of entries corresponding with 
+       * @returns {Array.<Object>} A list of entries corresponding with
        *     matches (@see APISearchCorpus.findMatch_ for keyword search
        *     algorithm.  Results are returned in a sorted order, first by
-       *     length, then alphabetically by name.  An exact match will be 
+       *     length, then alphabetically by name.  An exact match will be
        *     returned first.
        */
       APISearchCorpus.prototype.search = function(text, limit) {
@@ -115,7 +115,7 @@
         }
         return results;
       };
-      
+
       /**
        * Sorts the corpus according to name length, then name alphabetically.
        */
@@ -129,18 +129,18 @@
           if (a['name'] > b['name']) return 1;
           return 0;
         };
-        
+
         function compare(a, b) {
           var result = compareLength(a, b);
           if (result == 0) result = compareAlpha(a, b);
           return result;
         };
-        
+
         this.corpus_.sort(compare);
       };
-      
+
       //////////////////////////////////////////////////////////////////////////
-      
+
       /**
        * Provides an interface to the Chrome Extensions documentation site.
        * @param {APISearchCorpus} corpus The search corpus to populate.
@@ -154,17 +154,17 @@
         ].join('');
         this.corpus_ = corpus;
       };
-      
-      /** 
+
+      /**
        * Initiates a fetch of the docs and populates the corpus.
        */
       DocsManager.prototype.fetch = function() {
         this.fetchApi_(this.onApi_.bind(this));
       };
-      
+
       /**
        * Retrieves the API manifest from cache or fetches a new one if none.
-       * @param {Function} callback The function to pass the parsed manifest 
+       * @param {Function} callback The function to pass the parsed manifest
        *    data to.
        */
       DocsManager.prototype.fetchApi_ = function(callback) {
@@ -183,12 +183,12 @@
             localStorage['cache'] = xhr.responseText;
             var json = JSON.parse(xhr.responseText);
             callback(json);
-          } 
+          }
         });
         xhr.open('GET', this.API_MANIFEST_URL, true);
         xhr.send();
       };
-      
+
       /**
        * Returns a time which can be used to cache a manifest response.
        * @returns {Number} A timestamp divided by the number of ms in a day,
@@ -216,7 +216,7 @@
         }
         return linkparts.join('');
       };
-      
+
       /**
        * Returns a qualified name for an API element.
        * @param {String} namespace The namespace (e.g. tabs, windows).
@@ -230,7 +230,7 @@
         }
         return nameparts.join('.');
       };
-      
+
       /**
        * Parses an API manifest data structure and populates the search index.
        * @param {Object} api The api manifest, as a JSON-parsed object.
@@ -247,12 +247,12 @@
           this.corpus_.addEntry(nsName, nsUrl, null, 'namespace');
           this.parseAPIArray_('method', ns, module.functions);
           this.parseAPIArray_('event', ns, module.events);
-          this.parseAPIArray_('type', ns, module.types);          
+          this.parseAPIArray_('type', ns, module.types);
           this.parseAPIObject_('property', ns, module.properties);
           this.corpus_.sort();
         }
       };
-      
+
       /**
        * Parses an API manifest subsection which is formatted as an Array.
        * @param {String} type The type of data (e.g. method, event, type).
@@ -271,7 +271,7 @@
           this.corpus_.addEntry(fullname, url, description, type);
         }
       };
-      
+
       /**
        * Parses an API manifest subsection which is formatted as an Object.
        * @param {String} type The type of data (e.g. property).
@@ -288,9 +288,9 @@
           }
         }
       };
-      
+
       //////////////////////////////////////////////////////////////////////////
-      
+
       /**
        * Manages text input into the omnibox and returns search results.
        * @param {APISearchCorpus} Populated search corpus.
@@ -306,7 +306,7 @@
         chrome.experimental.omnibox.onInputEntered.addListener(
             this.onEntered_.bind(this));
       };
-      
+
       /**
        * Converts a corpus match to an object suitable for the omnibox API.
        * @param {Object} match The match to convert.
@@ -323,7 +323,7 @@
           styles.push(chrome.experimental.omnibox.styleNone(ranges[i][1]));
           lastIndex = ranges[i][1];
         }
-        
+
         if (match['type']) {
           desc = this.pushStyle_(styles, 'Url', desc, match['type']);
           lastIndex = desc.length;
@@ -332,20 +332,20 @@
           desc = this.pushStyle_(styles, 'Dim', desc, match['description']);
           lastIndex = desc.length;
         }
-        
+
         if (lastIndex == desc.length) styles.pop();
-        
+
         return {
           'content' : name,
           'description' : desc,
           'descriptionStyles' : styles
         };
       };
-      
+
       /**
        * Suggests a list of possible matches when omnibox text changes.
        * @param {String} text Text input from the omnibox.
-       * @param {Function} suggest Callback to execute with a list of 
+       * @param {Function} suggest Callback to execute with a list of
        *     suggestion objects, if any matches were found.
        */
       OmniboxManager.prototype.onChanged_ = function(text, suggest) {
@@ -357,7 +357,7 @@
         }
         suggest(suggestions);
       };
-      
+
       /**
        * Opens the most appropriate URL when enter is pressed in the omnibox.
        *
@@ -372,30 +372,30 @@
           this.tabManager_.open(matches[0]['url']);
         }
       };
-      
+
       /**
        * Helper function for constructing a suggestion style list.
-       * 
+       *
        * Adds a separator and text to a description, and modifies an array
        * of styles so that the separator is not styled and the additional text
        * obtains the requested style type.
        *
        * This method expects the list of styles to end with a styleNone style.
        * It will modify the list so that the last element is a styleNone style.
-       * The last element will always be at the end of the returned string, 
+       * The last element will always be at the end of the returned string,
        * which will throw an error unless it is removed before being passed
        * to the API (this method is intended to be called a few times in a row).
        * @see OmniboxManager.matchToSuggestion_ for code that removes this last
        * entry.
        *
-       * @param {Array.<Object>} styles An array of styles, in the format 
+       * @param {Array.<Object>} styles An array of styles, in the format
        *     expected by the omnibox API.
        * @param {String} type The style type to apply - must be one of
        *     "Dim", "Match", "None", and "Url".
        * @param {String} desc The description text to append to and style.
        * @param {String} text The text to append to the description.
-       * @returns {String} The description plus a separator and the supplied 
-       *     text, intended to overwrite the variable which was passed into 
+       * @returns {String} The description plus a separator and the supplied
+       *     text, intended to overwrite the variable which was passed into
        *     this function as "desc".
        */
       OmniboxManager.prototype.pushStyle_ = function(styles, type, desc, text) {
@@ -405,9 +405,9 @@
         styles.push(chrome.experimental.omnibox.styleNone(desc.length));
         return desc;
       };
-      
+
       //////////////////////////////////////////////////////////////////////////
-      
+
       /**
        * Manages opening urls in tabs.
        * @constructor
@@ -416,7 +416,7 @@
         this.tab_ = null;
         chrome.tabs.onRemoved.addListener(this.onRemoved_.bind(this));
       };
-      
+
       /**
        * When a tab is removed, see if it was opened by us and null out if yes.
        * @param {Number} tabid ID of the removed tab.
@@ -424,7 +424,7 @@
       TabManager.prototype.onRemoved_ = function(tabid) {
         if (this.tab_ && tabid == this.tab_.id) this.tab_ = null;
       };
-      
+
       /**
        * When a tab opened by us is created, store it for future updates.
        * @param {Tab} tab The tab which was just opened.
@@ -432,14 +432,14 @@
       TabManager.prototype.onTab_ = function(tab) {
         this.tab_ = tab;
       };
-      
+
       /**
        * Opens the supplied URL.
        *
        * The first time this method is called a new tab is created.  Subsequent
        * times this is called, the opened tab will be updated.  If that tab
        * is ever closed, then a new tab will be created for the next call.
-       * 
+       *
        * @param {String} url The URL to open.
        */
       TabManager.prototype.open = function(url) {
@@ -452,9 +452,9 @@
           }
         }
       };
-      
+
       //////////////////////////////////////////////////////////////////////////
-      
+
       var corpus = new APISearchCorpus();
       var docsManager = new DocsManager(corpus);
       docsManager.fetch();
